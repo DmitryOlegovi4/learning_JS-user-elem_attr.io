@@ -1,0 +1,36 @@
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+#root{
+    margin: 20px;
+}
+user-elem{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    max-width: 500px;
+    max-height: 500px;
+    height: 300px;
+    overflow: auto;
+}
+user-elem button{
+    width: 100px;
+    margin-top: 10px;
+}
+.hide{
+    display: none;
+}
+.btnClose{
+    width: auto;
+    padding: 0 5px;
+    border-radius: 5px;
+    background-color: transparent;
+    position: absolute;
+    top: 0;
+    right: 10px;
+    box-shadow: 3px 3px 8px black;
+    font-weight: bold;
+}
