@@ -49,21 +49,7 @@ class UserElem extends HTMLElement {
         this.appendChild(this.btnClose)
         this.btn.addEventListener('click', this.btnHandler.bind(this))
         this.btnClose.addEventListener('click', this.btnCloseHandler.bind(this))
-        let attrText = this.getAttribute('attrText');
-        let attrColorText = this.getAttribute('attrColorText');
-        let attrImg = this.getAttribute('attrImg');
-        console.log('connectedCallback(attrText):', attrText);
-
-        if(attrText || attrImg){
-            this.par.innerText = attrText;
-            this.par.style.color = attrColorText;
-            this.style.background = `url(${attrImg}) no-repeat`;
-            this.style.backgroundSize = 'cover';
-            this.style.backgroundPosition = 'center';
-        }else{
-            this.par.innerText = '';
-            this.style.background = 'dodgerblue';
-        }
+        this.style.background = 'dodgerblue';
     }
 
     btnHandler(e) {
@@ -71,30 +57,49 @@ class UserElem extends HTMLElement {
         const audio = new Audio('magic-spells.mp3');
         audio.autoplay = true;
         this.form.classList.add('hide');
-        this.setAttribute('attrText', this.userText.value)
-        this.setAttribute('attrColorText', this.userTextColor.value)
-        this.setAttribute('attrImg', this.userImgURL.value)
-        this.par.classList.remove('hide');
+        this.setAttribute('data-text', this.userText.value)
+        this.setAttribute('data-color-text', this.userTextColor.value)
+        this.setAttribute('data-img', this.userImgURL.value)
         this.btnClose.classList.remove('hide');
-
+        this.addEventListener('mouseover', function () {
+            this.par.classList.remove('hide');
+        })
+        this.addEventListener('mouseout', function () {
+            this.par.classList.add('hide');
+        })
     }
     btnCloseHandler(){
-        console.log('_close_')
-    }
-
-    disconnectedCallback() {
-        console.log('Bye');
+        this.setAttribute('data-text', '')
+        this.setAttribute('data-color-text', '')
+        this.setAttribute('data-img', '')
+        this.removeEventListener('mouseover', function () {
+            this.par.classList.remove('hide');
+        })
+        this.removeEventListener('mouseout', function () {
+            this.par.classList.add('hide');
+        })
+        this.userText.value = '';
+        this.userTextColor.value = '#000';
+        this.userImgURL.value = '';
+        this.btnClose.classList.add('hide');
+        this.form.classList.remove('hide');
     }
 
     static get observedAttributes() {
-        return ['attrText', 'attrColorText', 'attrImg']
+        return ['data-text', 'data-color-text', 'data-img']
     }
 
     attributeChangedCallback(attrName, oldVal, newVal) {
-        console.log('attributesChangedCallback work');
-        console.log(attrName);
-        console.log(oldVal);
-        console.log(newVal);
+        if(attrName === 'data-text'){ this.par.innerText = newVal}
+        if(attrName === 'data-color-text'){ this.par.style.color = newVal}
+        if(attrName === 'data-img'){
+            if(newVal){
+                this.style.background = `url("${newVal}")`;
+                this.style.backgroundSize = 'cover';
+                this.style.backgroundPosition = 'center';
+                this.style.backgroundRepeat = 'no-repeat';
+            } else { this.style.background = 'dodgerblue';}
+        }
     }
 }
 
